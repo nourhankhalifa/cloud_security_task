@@ -44,11 +44,19 @@ jobs:
           pwd
           ls -la
           terraform output -json ansible_hosts_file
-          echo "testing\\n"
           cat ./ansible_hosts
         shell: bash
 
       - name: Run Ansible Playbook
         run: |
+          echo "Contents of ansible_hosts:"
+          cat ./ansible_hosts | cat -A
+
+          sed -i 's/\r//g' ./ansible_hosts  # Remove carriage returns
+          sed -i '/^$/d' ./ansible_hosts   # Remove blank lines
+          uniq ./ansible_hosts > tmp_hosts && mv tmp_hosts ./ansible_hosts
+          echo "Normalized ansible_hosts file:"
+          cat ./ansible_hosts
+
           ansible-playbook -i ./ansible_hosts nginx_setup.yml
         shell: bash
