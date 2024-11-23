@@ -76,4 +76,13 @@ resource "null_resource" "generate_ansible_hosts" {
       terraform output -raw private_key > ./web_server.pem
     EOT
   }
+  provisioner "local-exec" {
+    command = <<EOT
+      cat <<EOF > ansible_extra_vars.json
+{
+  "certbot_email": "${var.certbot_email}",
+  "certbot_domain": "${aws_instance.web_server.public_dns}"
+}
+    EOT
+  }
 }

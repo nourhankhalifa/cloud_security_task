@@ -5,3 +5,7 @@ variable "access_key" {
 variable "secret_key" {
   default = ""
 }
+
+variable "certbot_email" {
+  default = "nourhan.khalifa12@gmail.com"
+}

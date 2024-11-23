@@ -50,5 +50,5 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i ./ansible_hosts nginx_setup.yml
+          ansible-playbook -i ./ansible_hosts nginx_setup.yml --extra-vars "@ansible_extra_vars.json"
         shell: bash

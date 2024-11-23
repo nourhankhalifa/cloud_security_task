@@ -1,17 +1,20 @@
 - name: Setup Nginx with HTTPS and Upload Logo
   hosts: all
   become: yes
+  vars:
+    certbot_email: "{{ certbot_email }}"
+    certbot_domain: "{{ certbot_domain }}"
   tasks:
     - name: Update all packages
       yum:
         name: "*"
         state: latest
 
-    - name: Install Nginx and OpenSSL
+    - name: Install Nginx, Certbot, and dependencies
       yum:
         name:
           - nginx
-          - openssl
+          - python3-certbot-nginx
         state: present
 
     - name: Start and enable Nginx service
@@ -25,34 +28,17 @@
         content: "Hello! Here is our logo!"
         dest: /usr/share/nginx/html/index.html
 
-    - name: Generate self-signed SSL certificate
-      command: >
-        openssl req -x509 -nodes -days 365 -newkey rsa:2048
-        -keyout /etc/nginx/self-signed.key
-        -out /etc/nginx/self-signed.crt
-        -subj "/CN=localhost"
-
-    - name: Configure Nginx for HTTPS
-      copy:
-        dest: /etc/nginx/conf.d/ssl.conf
-        content: |
-          server {
-              listen 443 ssl;
-              ssl_certificate /etc/nginx/self-signed.crt;
-              ssl_certificate_key /etc/nginx/self-signed.key;
-
-              location / {
-                  root /usr/share/nginx/html;
-                  index index.html;
-              }
-          }
-
     - name: Upload logo file
       copy:
         src: logo.png
         dest: /usr/share/nginx/html/logo.png
 
-    - name: Restart Nginx to apply configuration
+    - name: Obtain SSL certificate with Certbot
+      command: >
+        certbot --nginx -n --agree-tos --email {{ certbot_email }}
+        -d {{ certbot_domain }}
+
+    - name: Restart Nginx to apply Let's Encrypt certificate
       systemd:
         name: nginx
         state: restarted
