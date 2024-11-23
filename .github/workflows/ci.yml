@@ -34,7 +34,7 @@ jobs:
         run: |
           terraform apply -auto-approve
           echo "Bastion IP: $(terraform output -raw bastion_ip)"
-          echo "::set-output name=bastion_ip::$(terraform output -raw bastion_ip)"
+          echo "::set-output name=bastion_ip::$(terraform output -raw bastion_ip 2>/dev/null)"
           terraform output -json ansible_hosts_file | grep -v '%0A' | grep -v '/_temp/' | xargs printf "%b" | grep -v "::debug::" > ./ansible_hosts
           terraform output -raw private_key > ./web_server.pem
 
@@ -55,7 +55,6 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          sleep 30
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ansible_hosts nginx_setup.yml \
             --extra-vars '{"bastion_ip": "${{ steps.terraform_apply.outputs.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
