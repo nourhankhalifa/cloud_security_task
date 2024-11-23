@@ -53,7 +53,6 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          echo "StrictHostKeyChecking no" >> ~/.ssh/config
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ansible_hosts nginx_setup.yml \
             -e "ansible_host_key_checking=False" --extra-vars '{"bastion_ip": "${{ env.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
