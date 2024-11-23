@@ -234,6 +234,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 }
 
 resource "null_resource" "generate_ansible_hosts" {
+  depends_on = [ aws_instance.web_server, aws_instance.bastion_host ]
   triggers = {
     always_run = timestamp()
   }

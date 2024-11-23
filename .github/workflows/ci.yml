@@ -53,6 +53,7 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
+          cat web_server.pem
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ansible_hosts nginx_setup.yml \
             --extra-vars '{"bastion_ip": "${{ env.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
