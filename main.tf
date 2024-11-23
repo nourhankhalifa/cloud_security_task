@@ -67,7 +67,7 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file | tr -d '%0A' | grep -v '/_temp/' | xargs printf "%b" | grep -v "::debug::" > ./ansible_hosts
+      terraform output -json ansible_hosts_file | grep -v '%0A' | grep -v '/_temp/' | xargs printf "%b" | grep -v "::debug::" > ./ansible_hosts
       # terraform output -json ansible_hosts_file | sed -e 's/^"//' -e 's/"$//' -e 's/\\\\n/\n/g' | grep -v "::debug::" > ./ansible_hosts
     EOT
   }
