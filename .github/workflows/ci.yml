@@ -42,6 +42,8 @@ jobs:
           sudo apt update
           sudo apt install -y ansible
           pwd
+          la -la
+          echo "testing\\n"
           cat ansible_hosts
         shell: bash
 
