@@ -41,6 +41,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y ansible
+          pwd
+          cat ansible_hosts
         shell: bash
 
       - name: Run Ansible Playbook
