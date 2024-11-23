@@ -49,6 +49,7 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
+          sleep 20
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ./ansible_hosts nginx_setup.yml
         shell: bash
