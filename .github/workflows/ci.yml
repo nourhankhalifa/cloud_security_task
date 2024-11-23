@@ -55,5 +55,5 @@ jobs:
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ansible_hosts nginx_setup.yml \
-            --extra-vars '{"bastion_ip": "${{ steps.terraform_apply.outputs.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
+            --extra-vars '{"bastion_ip": "${{ env.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
         shell: bash
