@@ -64,7 +64,7 @@ output "private_key" {
 resource "null_resource" "generate_ansible_hosts" {
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file | jq -r '.' > ansible_hosts
+      terraform output -json ansible_hosts_file > ansible_hosts
     EOT
   }
   provisioner "local-exec" {
