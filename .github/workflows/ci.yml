@@ -49,14 +49,6 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          # echo "Contents of ansible_hosts:"
-          # cat ./ansible_hosts | cat -A
-
-          # sed -i '/^$/d' ./ansible_hosts                   # Remove empty lines
-          # sed -i '/^\[web_servers\]$/!b;n;d' ./ansible_hosts # Keep only one group header
-          # echo "Normalized ansible_hosts file:"
-          # cat ./ansible_hosts
-
-          ansible-inventory -i ./ansible_hosts --list
+          export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i ./ansible_hosts nginx_setup.yml
         shell: bash
