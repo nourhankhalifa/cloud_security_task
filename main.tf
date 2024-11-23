@@ -67,12 +67,12 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file | tr -d '%0A' | xargs printf "%b" > ansible_hosts
+      terraform output -json ansible_hosts_file | tr -d '%0A' | xargs printf "%b" > ./ansible_hosts
     EOT
   }
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -raw private_key > web_server.pem
+      terraform output -raw private_key > ./web_server.pem
     EOT
   }
 }

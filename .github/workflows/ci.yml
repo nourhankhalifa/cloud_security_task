@@ -34,7 +34,7 @@ jobs:
 
       - name: Set Permissions for .pem File
         run: |
-          chmod 600 web_server.pem
+          chmod 600 ./web_server.pem
         shell: bash
 
       - name: Install Ansible
@@ -44,10 +44,10 @@ jobs:
           pwd
           ls -la
           echo "testing\\n"
-          cat ansible_hosts
+          cat ./ansible_hosts
         shell: bash
 
       - name: Run Ansible Playbook
         run: |
-          ansible-playbook -i ansible_hosts nginx_setup.yml
+          ansible-playbook -i ./ansible_hosts nginx_setup.yml
         shell: bash
