@@ -9,3 +9,7 @@ output "private_key" {
   value     = tls_private_key.example.private_key_pem
   sensitive = true
 }
+
+output "bastion_ip" {
+  value = aws_instance.bastion_host.public_ip
+}
