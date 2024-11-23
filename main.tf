@@ -51,10 +51,9 @@ resource "aws_security_group" "web_server_sg" {
 }
 
 output "ansible_hosts_file" {
-  value = <<EOT
-[web_servers]
-${aws_instance.web_server.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/my-key.pem
-EOT
+  value = templatefile("${path.module}/hosts.tpl", {
+    hosts = aws_instance.web_server.*.public_ip
+  })
 }
 
 output "private_key" {
@@ -68,7 +67,7 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file > ansible_hosts
+      printf "%b" $(terraform output -json ansible_hosts_file | sed -e 's/^"//' -e 's/"$//') > ansible_hosts
     EOT
   }
   provisioner "local-exec" {
