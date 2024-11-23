@@ -43,6 +43,7 @@ jobs:
           sudo apt install -y ansible
           pwd
           ls -la
+          terraform output -json ansible_hosts_file
           echo "testing\\n"
           cat ./ansible_hosts
         shell: bash
