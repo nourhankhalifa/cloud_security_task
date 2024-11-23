@@ -51,7 +51,7 @@ resource "aws_security_group" "web_server_sg" {
 }
 
 output "ansible_hosts_file" {
-  value = templatefile("${path.module}/hosts.tpl", {
+  value = templatefile("hosts.tpl", {
     hosts = aws_instance.web_server.*.public_ip
   })
 }
@@ -67,7 +67,7 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file | xargs printf "%b" > ansible_hosts
+      terraform output -json ansible_hosts_file | tr -d '%0A' | xargs printf "%b" > ansible_hosts
     EOT
   }
   provisioner "local-exec" {
