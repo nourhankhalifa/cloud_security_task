@@ -51,5 +51,5 @@ jobs:
         run: |
           sleep 20
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i ./ansible_hosts nginx_setup.yml --extra-vars "@ansible_extra_vars.json"
+          ansible-playbook -i ./ansible_hosts nginx_setup.yml"
         shell: bash
