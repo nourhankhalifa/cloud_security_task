@@ -2,6 +2,9 @@
 
 This project automates the provisioning of AWS infrastructure and the setup of an Nginx server using Terraform and Ansible.
 
+The following architecture will be created
+<img width="1122" alt="Screenshot 2024-11-24 at 1 46 35 AM" src="https://github.com/user-attachments/assets/2e1ce86e-b62b-429e-aa8f-22ad8487ac95">
+
 ## Prerequisites
 
 1. Ensure you have **Terraform** and **Ansible** installed on your system.
