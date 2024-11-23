@@ -49,14 +49,14 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          echo "Contents of ansible_hosts:"
-          cat ./ansible_hosts | cat -A
+          # echo "Contents of ansible_hosts:"
+          # cat ./ansible_hosts | cat -A
 
-          sed -i 's/\r//g' ./ansible_hosts  # Remove carriage returns
-          sed -i '/^$/d' ./ansible_hosts   # Remove blank lines
-          uniq ./ansible_hosts > tmp_hosts && mv tmp_hosts ./ansible_hosts
-          echo "Normalized ansible_hosts file:"
-          cat ./ansible_hosts
+          # sed -i '/^$/d' ./ansible_hosts                   # Remove empty lines
+          # sed -i '/^\[web_servers\]$/!b;n;d' ./ansible_hosts # Keep only one group header
+          # echo "Normalized ansible_hosts file:"
+          # cat ./ansible_hosts
 
+          ansible-inventory -i ./ansible_hosts --list
           ansible-playbook -i ./ansible_hosts nginx_setup.yml
         shell: bash
