@@ -36,8 +36,6 @@ jobs:
           bastion_ip=$(terraform output -raw bastion_ip 2>/dev/null | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' )
           echo "Bastion IP: $bastion_ip"
           echo "bastion_ip=$bastion_ip" >> $GITHUB_ENV
-          terraform output -json ansible_hosts_file | grep -v '%0A' | grep -v '/_temp/' | xargs printf "%b" | grep -v "::debug::" > ./ansible_hosts
-          terraform output -raw private_key > ./web_server.pem
 
       - name: Set Permissions for .pem File
         run: |

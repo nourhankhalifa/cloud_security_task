@@ -232,3 +232,19 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
   }
 }
+
+resource "null_resource" "generate_ansible_hosts" {
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOT
+      terraform output -json ansible_hosts_file | grep -v '%0A' | grep -v '/_temp/' | xargs printf "%b" | grep -v "::debug::" > ./ansible_hosts
+    EOT
+  }
+  provisioner "local-exec" {
+    command = <<EOT
+      terraform output -raw private_key > ./web_server.pem
+    EOT
+  }
+}
