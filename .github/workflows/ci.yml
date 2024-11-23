@@ -30,7 +30,13 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        id: terraform_apply
+        run: |
+          terraform apply -auto-approve
+          echo "Bastion IP: $(terraform output -raw bastion_ip)"
+          echo "::set-output name=bastion_ip::$(terraform output -raw bastion_ip)"
+          terraform output -json ansible_hosts_file | sed -e 's/^"//' -e 's/"$//' -e 's/\\n/\n/g' > ./ansible_hosts
+          terraform output -raw private_key > ./web_server.pem
 
       - name: Set Permissions for .pem File
         run: |
@@ -49,6 +55,8 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
+          sleep 30
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i ./ansible_hosts nginx_setup.yml --extra-vars "@ansible_extra_vars.json"
+          ansible-playbook -i ansible_hosts nginx_setup.yml \
+            --extra-vars '{"bastion_ip": "${{ steps.terraform_apply.outputs.bastion_ip }}", "ansible_ssh_user": "ec2-user"}'
         shell: bash

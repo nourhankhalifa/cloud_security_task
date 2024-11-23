@@ -1,11 +1,22 @@
 - name: Setup Nginx with HTTPS and Upload Logo
-  hosts: all
+  hosts: web_servers
+  vars:
+    ansible_ssh_user: "ec2-user"
+    ansible_ssh_common_args: >
+      -o ProxyCommand="ssh -i web_server.pem -W %h:%p -q {{ ansible_ssh_user }}@{{ bastion_ip }}" \
+      -o ServerAliveInterval=5 \
+      -o StrictHostKeyChecking=no
   become: yes
   tasks:
+    - name: Debug connection
+      debug:
+        msg: "Successfully connected to {{ inventory_hostname }}"
+
     - name: Update all packages
       yum:
         name: "*"
         state: latest
+      register: yum_update_result
 
     - name: Install Nginx
       yum:
