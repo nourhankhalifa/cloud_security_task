@@ -64,7 +64,8 @@ output "private_key" {
 resource "null_resource" "generate_ansible_hosts" {
   provisioner "local-exec" {
     command = <<EOT
-      terraform output -json ansible_hosts_file > ansible_hosts
+      sudo apt update && sudo apt install -y jq
+      terraform output -json ansible_hosts_file | jq -r '.' > ansible_hosts
     EOT
   }
   provisioner "local-exec" {
