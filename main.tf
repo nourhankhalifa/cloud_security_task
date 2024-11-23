@@ -51,9 +51,10 @@ resource "aws_security_group" "web_server_sg" {
 }
 
 output "ansible_hosts_file" {
-  value = templatefile("${path.module}/hosts.tpl", {
-    hosts = aws_instance.web_server.*.public_ip
-  })
+  value = <<EOT
+[web_servers]
+${aws_instance.web_server.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/my-key.pem
+EOT
 }
 
 output "private_key" {
@@ -67,8 +68,7 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      sudo apt update && sudo apt install -y jq
-      terraform output -json ansible_hosts_file | jq -r '.' > ansible_hosts
+      terraform output -json ansible_hosts_file > ansible_hosts
     EOT
   }
   provisioner "local-exec" {
