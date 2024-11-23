@@ -33,7 +33,7 @@ jobs:
         id: terraform_apply
         run: |
           terraform apply -auto-approve
-          bastion_ip=$(terraform output -raw bastion_ip | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\n' )
+          bastion_ip=$(terraform output -raw bastion_ip | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -n 1 )
           echo "bastion_ip=$bastion_ip" >> $GITHUB_ENV
 
       - name: Set Permissions for .pem File
