@@ -67,6 +67,7 @@ resource "null_resource" "generate_ansible_hosts" {
   }
   provisioner "local-exec" {
     command = <<EOT
+      sudo apt update && sudo apt install -y jq
       terraform output -json ansible_hosts_file | jq -r '.' > ansible_hosts
     EOT
   }
