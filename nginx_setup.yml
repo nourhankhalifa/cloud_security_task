@@ -1,20 +1,16 @@
 - name: Setup Nginx with HTTPS and Upload Logo
   hosts: all
   become: yes
-  vars:
-    certbot_email: "{{ certbot_email }}"
-    certbot_domain: "{{ certbot_domain }}"
   tasks:
     - name: Update all packages
       yum:
         name: "*"
         state: latest
 
-    - name: Install Nginx, Certbot, and dependencies
+    - name: Install Nginx
       yum:
         name:
           - nginx
-          - python3-certbot-nginx
         state: present
 
     - name: Start and enable Nginx service
@@ -33,12 +29,7 @@
         src: logo.png
         dest: /usr/share/nginx/html/logo.png
 
-    - name: Obtain SSL certificate with Certbot
-      command: >
-        certbot --nginx -n --agree-tos --email {{ certbot_email }}
-        -d {{ certbot_domain }}
-
-    - name: Restart Nginx to apply Let's Encrypt certificate
+    - name: Restart Nginx to apply configuration
       systemd:
         name: nginx
         state: restarted
