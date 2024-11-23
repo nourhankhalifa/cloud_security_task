@@ -71,6 +71,8 @@ resource "null_resource" "generate_ansible_hosts" {
   provisioner "local-exec" {
     command = <<EOT
       terraform output -raw private_key > web_server.pem
+      ls -la
+      pwd
     EOT
   }
 }
