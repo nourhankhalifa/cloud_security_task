@@ -28,3 +28,22 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+
+      - name: Set Permissions for .pem File
+        run: |
+          chmod 600 web_server.pem
+        shell: bash
+
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+        shell: bash
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook -i ansible_hosts nginx_setup.yml
+        shell: bash
